@@ -4,7 +4,7 @@ const inquirer = require("inquirer");
 const utils= require("utils");
 const generateMarkdown = require("./utils/generateMarkdown");
 
-const generateREADME = (answers) =>
+const generateREADME = (answers) => {}
 
 // TODO: Create an array of questions for user input
 inquirer
@@ -58,26 +58,40 @@ inquirer
         name: 'License',
         message: 'What Liscence Did You Use',
         choices: ['GNU GPLv3, Mozilla Public License 2.0, Apache License 2.0, MIT License, Boost Software License 1.0, The Unlicense, BSD 3-Clause'],
-    }     
+    } 
+    
 
 ])
 //function to write README file
-function writeToFile(fileName, data){
-  fs.writeFile(fileName, data, function(err){
+.then(answers => {
+  const READMEcontent= generateMarkdown(answers) 
+  writeToFile('.output/README.md', READMEcontent)
+})
+
+.then((answers) => {
+  const READMEcontent = generateREADME(answers)
+
+
+  fs.writeFileSync('README.md', READMEcontent, data, (err)=>
+  {
     if (err){
       return console.log(err);
     }   
   })
+
+
+
+ fs.writeFile('README.md', READMEcontent, (err) =>
+ err ? console.log(err) : console.log ('README Successfully created!'))
+})
+function writeToFile(fileName, data) {
+  return fs.writeFileSync(path.join(process.cwd(), fileName), data)
 }
 // TODO: Create a function to initialize app
 function init(){
   console.log( "Hello Please answner the following questions");
  promptUser(questions)
- .then(answers => {
-   const READMEcontent= generateMarkdown(answers)
-   writeToFile('.output/README.md', READMEcontent)
- });
-}
 
+};
 // Function call to initialize app
-init();
+init()
